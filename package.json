@@ -1,0 +1,11 @@
+{
+  "name": "mongo-to-mysql",
+  "version": "1.0.0",
+  "description": "Convert mongo query to mysql queries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhishek Khare",
+  "license": "ISC"
+}
