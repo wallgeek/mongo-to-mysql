@@ -1,6 +1,14 @@
+const Util = require("./util")
 const Query = module.exports = {}
 
+
 Query.insert = function (data, table) {
+
+    //---------Error handling----------//
+    if(!(Util.isObject(data) && Object.keys(data).length !== 0)) throw new Error('Missing data')
+    else if(!table || table.length === 0) throw new Error('Missing table name')
+    //---------------------------------//
+
     const columnList = []
     const valueList = []
 
@@ -14,6 +22,5 @@ Query.insert = function (data, table) {
         valueList.push(value)
     })
 
-    const query = "insert into " + table + " (" + columnList.join(",") + ") values (" + valueList.join(",") + ")"
-    return query
+    return "insert into " + table + " (" + columnList.join(",") + ") values (" + valueList.join(",") + ")"
 }
