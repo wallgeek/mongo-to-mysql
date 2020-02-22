@@ -1,12 +1,20 @@
 # mongo-to-mysql
 Convert mongo query to mysql queries
 
-This package works very well with mongodb package. This version only contains "insert" function. We will soon be coming up with more queries with proper documentation. Stay tuned
+This package lets you simplify code if you are using both mongodb and mysql in your project or either migrating from one mongodb to mysql. It works very well with mongodb package, you can add piece of code between the mongodb commands to easily change data at mysql and mongodb together without much change.
 
-# Usage
+We will soon be coming up with more queries with proper documentation. Stay tuned
 
-## Insert
-```node
+## Installation
+Using npm:
+```shell
+$ npm i mongo-to-mysql
+```
+
+## Usage
+
+### Insert
+```js
 const MoMy = require("mongo-to-mysql")
 
 let mongoDoc = {userName: "x", password: "y"}
@@ -17,8 +25,8 @@ console.log(getQuery)
 // Result: "insert into user (userName, password) values (x, y)"
 ```
 
-## Update
-```node
+### Update
+```js
 const MoMy = require("mongo-to-mysql")
 
 let mongoFind = {hour: {$gt: 9}}
