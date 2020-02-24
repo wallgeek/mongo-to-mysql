@@ -1,14 +1,16 @@
 {
   "name": "mongo-to-mysql",
-  "version": "1.2.1",
-  "description": "Convert mongo query to mysql queries",
+  "version": "1.2.2",
+  "description": "Convert mongo query to mysql command",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "mongo",
-    "mysql"
+    "mysql",
+    "transfer",
+    "util"
   ],
   "author": "Abhishek Khare",
   "license": "ISC",

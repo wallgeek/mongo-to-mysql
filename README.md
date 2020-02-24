@@ -1,7 +1,5 @@
 # mongo-to-mysql
-Convert mongo query to mysql queries
-
-This package lets you simplify code if you are using both mongodb and mysql in your project or either migrating from one mongodb to mysql. It works very well with mongodb package, you can add piece of code between the mongodb commands to easily change data at mysql and mongodb together without much change.
+Convert simple mongodb queries to mysql command. See example below
 
 We will soon be coming up with more queries with proper documentation. Stay tuned
 
@@ -26,6 +24,20 @@ console.log(getQuery)
 ```
 
 ### Update
+"$in" example:
+```js
+const MoMy = require("mongo-to-mysql")
+
+let mongoFind = {name: {$in: ["abc", "def", "ghi"]}}
+let mongoUpdate = {$inc: {visits: 1}}
+let tableName = "user"
+let getQuery = MoMy.update(mongoFind, mongoUpdate, tableName)
+
+console.log(getQuery)
+// Result: "update user set visits = visits + 1 where name in ("abc","def","ghi")"
+```
+
+"$gt" example:
 ```js
 const MoMy = require("mongo-to-mysql")
 
@@ -37,6 +49,17 @@ let getQuery = MoMy.update(mongoFind, mongoUpdate, tableName)
 console.log(getQuery)
 // Result: "update user set visits = visits + 1 where hour > 9"
 ```
-Update query currently works for operations "$in", "$eq", "$gte", "$gt", "$lte", "$lt", "$ne", "$nin"
-Use simple queries.
-And use "$set" and "$inc" to update
+
+Combined example:
+```js
+const MoMy = require("mongo-to-mysql")
+
+let mongoFind = {name: {$in: ["abc", "def", "ghi"]}, hour: {$gt: 9}}
+let mongoUpdate = {$inc: {visits: 1}}
+let tableName = "user"
+let getQuery = MoMy.update(mongoFind, mongoUpdate, tableName)
+
+console.log(getQuery)
+// Result: "update user set visits = visits + 1 where name in ("abc","def","ghi") and hour > 9"
+```
+Supported mongodb operations currently: "$in", "$nin", "$eq", "$ne", "$gte", "$gt", "$lte", "$lt"
