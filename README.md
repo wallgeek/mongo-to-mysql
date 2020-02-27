@@ -62,4 +62,18 @@ let getQuery = MoMy.update(mongoFind, mongoUpdate, tableName)
 console.log(getQuery)
 // Result: "update user set visits = visits + 1 where name in ("abc","def","ghi") and hour > 9"
 ```
+
+Multiple updates ("$inc" and "$set"):
+```js
+const MoMy = require("mongo-to-mysql")
+
+let mongoFind = {name: {$in: ["abc", "def", "ghi"]}, hour: {$gt: 9}}
+let mongoUpdate = {$inc: {visits: 1}, $set: {hasVisited: 1}}
+let tableName = "user"
+let getQuery = MoMy.update(mongoFind, mongoUpdate, tableName)
+
+console.log(getQuery)
+// Result: "update user set visits = visits + 1, hasVisited = 1 where name in ("abc","def","ghi") and hour > 9"
+```
+
 Supported mongodb operations currently: "$in", "$nin", "$eq", "$ne", "$gte", "$gt", "$lte", "$lt"
