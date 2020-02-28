@@ -1,6 +1,6 @@
 {
   "name": "mongo-to-mysql",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Convert mongo query to mysql command",
   "main": "index.js",
   "scripts": {
