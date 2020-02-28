@@ -1,65 +1,31 @@
 const Util = require("./util")
+const Constant = require("./constant")
+
 const Query = module.exports = {}
 
-
-Query.insert = function (data, table) {
-
-    //---------Error handling----------//
-    if(!(Util.isObject(data) && Object.keys(data).length !== 0)) throw new Error('Missing data')
-    else if(!table || table.length === 0) throw new Error('Missing table name')
-    //---------------------------------//
-
-    const columnList = []
-    const valueList = []
-
-    const columnMap = {}
-
-    Object.keys(data).forEach(ele => {
-        let column = ele
-        let value = data[ele]
-
-        columnList.push(column)
-        valueList.push(value)
-    })
-
-    return "insert into " + table + " (" + columnList.join(",") + ") values (" + valueList.join(",") + ")"
-}
-
 const ConvertFindOperation = function (data) {
+    const opMap = Constant.OPERATOR_MAP
     let val = null
-    let op = " = "
+    let op = opMap.EQUAL.MYSQL // General
 
     //TODO: write more cases. These are just comparison operator
     Object.keys(data).forEach(ele => {
-        if(ele === "$in"){
+        val = data[ele]
+
+        if (ele === opMap.EQUAL.MONGO) op = opMap.EQUAL.MYSQL
+        else if (ele === opMap.NOT_EQUAL.MONGO) op = opMap.NOT_EQUAL.MYSQL
+        else if (ele === opMap.GREATER_THAN.MONGO) op = opMap.GREATER_THAN.MYSQL
+        else if (ele === opMap.GREATER_THAN_EQUAL.MONGO) op = opMap.GREATER_THAN_EQUAL.MYSQL
+        else if (ele === opMap.LESS_THAN.MONGO) op = opMap.LESS_THAN.MYSQL
+        else if (ele === opMap.LESS_THAN_EQUAL.MONGO) op = opMap.LESS_THAN_EQUAL.MYSQL
+        else if(ele === opMap.IN.MONGO || ele === opMap.NOT_IN.MONGO){
             val = "(" + data[ele].map(e => "\"" + e + "\"").join(",") + ")"
-            op = " in "
-        }else if (ele === "$eq") {
-            val = data[ele]
-            op = " = "
-        }else if (ele === "$gt") {
-            val = data[ele]
-            op = " > "
-        }else if (ele === "$gte") {
-            val = data[ele]
-            op = " >= "
-        }else if (ele === "$lt") {
-            val = data[ele]
-            op = " < "
-        }else if (ele === "$lte") {
-            val = data[ele]
-            op = " <= "
-        }else if (ele === "$ne") {
-            val = data[ele]
-            op = " != "
-        }else if (ele === "$nin") {
-            val = "(" + data[ele].map(e => "\"" + e + "\"").join(",") + ")"
-            op = " not in "
+            op = ele === opMap.IN.MONGO ? opMap.IN.MYSQL : opMap.NOT_IN.MYSQL
         }
     })
 
     return {
-        operator: op,
+        operator: " " + op + " ",
         value: val
     }
 }
@@ -118,6 +84,29 @@ const GenerateWhere = function myself (find){
     })
 
     return whereList
+}
+
+Query.insert = function (data, table) {
+
+    //---------Error handling----------//
+    if(!(Util.isObject(data) && Object.keys(data).length !== 0)) throw new Error('Missing data')
+    else if(!table || table.length === 0) throw new Error('Missing table name')
+    //---------------------------------//
+
+    const columnList = []
+    const valueList = []
+
+    const columnMap = {}
+
+    Object.keys(data).forEach(ele => {
+        let column = ele
+        let value = data[ele]
+
+        columnList.push(column)
+        valueList.push(value)
+    })
+
+    return "insert into " + table + " (" + columnList.join(",") + ") values (" + valueList.join(",") + ")"
 }
 
 Query.update = function (find, data, table) {
